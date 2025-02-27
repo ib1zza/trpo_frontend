@@ -2,12 +2,17 @@ import React, {useEffect, useState} from 'react';
 import { Input, Button, Tag, message } from 'antd';
 
 interface KeywordInputProps {
+    values: string[];
     onChange: (keywords: string[]) => void;
 }
 
-const KeywordInput = ({onChange}: KeywordInputProps) => {
+const KeywordInput = ({onChange, values}: KeywordInputProps) => {
     const [keyword, setKeyword] = useState('');
     const [keywords, setKeywords] = useState<string[]>([]);
+
+    useEffect(() => {
+        setKeywords(values)
+    }, [values]);
 
     const handleAddKeyword = () => {
         if (keyword.trim() === '') {
@@ -19,12 +24,9 @@ const KeywordInput = ({onChange}: KeywordInputProps) => {
             return;
         }
         setKeywords([...keywords, keyword.trim()]);
+        onChange([...keywords, keyword.trim()])
         setKeyword('');
     };
-
-    useEffect(() => {
-        onChange(keywords)
-    }, [keywords]);
 
     const handleRemoveKeyword = (removedKeyword: string) => {
         setKeywords(keywords.filter((kw) => kw !== removedKeyword));
