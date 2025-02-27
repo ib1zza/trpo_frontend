@@ -86,6 +86,17 @@ export const getAllResourcesByCategory = async (categoryId: number): Promise<Res
     }
 };
 
+// Функция для получения всех ресурсов по категории
+export const getAllResourcesByUser = async (userId: number): Promise<Resource[]> => {
+    try {
+        const response = await axios.get(`${API_URL}/user/${userId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching resources by category:', error);
+        throw error;
+    }
+};
+
 // Функция для получения всех ресурсов
 export const getAllResources = async (): Promise<Resource[]> => {
     try {

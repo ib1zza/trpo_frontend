@@ -98,3 +98,5 @@ export const loginUser = async (data: LoginData): Promise<LoginResponse> => {
         throw error;
     }
 };
+
+

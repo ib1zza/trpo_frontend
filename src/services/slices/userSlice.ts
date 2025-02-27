@@ -9,17 +9,20 @@ import {
     updateUser,
     UpdateUserData
 } from '../../api/User';
+import {getAllResourcesByUser, Resource} from "../../api/resourses.ts";
 
 interface IUserState {
     user: IUser | null;
     loading: boolean;
     error: string | null;
+    resources: Resource[] | null;
 }
 
 const initialState: IUserState = {
     user: null,
     loading: false,
     error: null,
+    resources: null,
 };
 
 // Thunk для получения пользователя по ID
@@ -57,6 +60,11 @@ export const loginUserThunk = createAsyncThunk('users/login', async (data: Login
     }
     return response.user; // Возвращаем пользователя после входа
 });
+
+export const getUsersResources = createAsyncThunk('users/resources', async (userId: number) => {
+    const resources = await getAllResourcesByUser(userId);
+    return resources;
+})
 
 const userSlice = createSlice({
     name: 'user',
@@ -119,7 +127,10 @@ const userSlice = createSlice({
                 state.loading = false;
                 localStorage.removeItem('user');
                 state.error = action.error.message || 'Failed to log in';
-            });
+            })
+            .addCase(getUsersResources.fulfilled, (state, action: PayloadAction<Resource[]>) => {
+                state.resources = action.payload;
+            })
     },
 });
 

@@ -11,7 +11,7 @@ const {Title} = Typography;
 const {Header, Content, Footer} = Layout;
 
 const HeaderUI = () => {
-    const user = useUser();
+    const {user} = useUser();
 
     const navigate = useNavigate();
 
@@ -30,7 +30,7 @@ const HeaderUI = () => {
                 marginLeft: 'auto'
             },
             label: user ? (
-                <span style={{marginLeft: '16px'}}>{user.email}</span>
+                <Link to={AppRoutes.ACCOUNT} style={{marginLeft: '16px'}}>{user.email}</Link>
             ) : (
                 <Link key="3" to={AppRoutes.LOGIN}>
                     Вход

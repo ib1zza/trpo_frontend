@@ -6,6 +6,7 @@ import LoginPage from "../../pages/Login";
 import RegisterPage from "../../pages/Register";
 import RegisterOwnerPage from "../../pages/RegisterOwner";
 import CreateResourcePage from "../../pages/CreateResource";
+import AccountPage from "../../pages/Account";
 
 export enum AppRoutes {
     HOME = '/',
@@ -14,6 +15,7 @@ export enum AppRoutes {
     REGISTER = '/register',
     REGISTER_OWNER = '/register/owner',
     CREATE_RESOURCE = '/create',
+    ACCOUNT = '/account'
 }
 
 const RouteConfig: Record<AppRoutes, {path: string, element: JSX.Element}> = {
@@ -23,6 +25,7 @@ const RouteConfig: Record<AppRoutes, {path: string, element: JSX.Element}> = {
     [AppRoutes.REGISTER]: {path: AppRoutes.REGISTER, element: <RegisterPage/>},
     [AppRoutes.REGISTER_OWNER]: {path: AppRoutes.REGISTER_OWNER, element: <RegisterOwnerPage/>},
     [AppRoutes.CREATE_RESOURCE]: {path: AppRoutes.CREATE_RESOURCE, element: <CreateResourcePage/>},
+    [AppRoutes.ACCOUNT]: {path: AppRoutes.ACCOUNT, element: <AccountPage/>}
 }
 
 const AppRouter = () => {

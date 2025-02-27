@@ -10,7 +10,7 @@ const {Option} = Select;
 
 const CreateResourcePage = () => {
     const categories = useCategories();
-    const user = useUser();
+    const {user} = useUser();
 
     const [formData, setFormData] = useState<CreateResourceData>({
         title: '',
