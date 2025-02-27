@@ -2,11 +2,12 @@ import { configureStore } from '@reduxjs/toolkit'
 import CategoriesSlice from "./slices/categoriesSlice.ts";
 import {useDispatch, useSelector} from "react-redux";
 import UserSlice from "./slices/userSlice.ts";
-
+import SearchSlice from "./slices/searchSlice.ts";
 export const store = configureStore({
     reducer: {
         categories: CategoriesSlice,
-        user: UserSlice
+        user: UserSlice,
+        search: SearchSlice,
     },
 })
 

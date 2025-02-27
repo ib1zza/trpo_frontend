@@ -135,7 +135,7 @@ const CreateResourcePage = () => {
                 <Form.Item
                     label="Ключевые слова"
                 >
-                    <KeywordInput onChange={handleKeywordsChange}/>
+                    <KeywordInput values={formData.keywords} onChange={handleKeywordsChange}/>
                 </Form.Item>
                 <Form.Item>
                     <Button type="primary" htmlType="submit" block>

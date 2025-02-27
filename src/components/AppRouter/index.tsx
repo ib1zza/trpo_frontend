@@ -1,5 +1,5 @@
-import {JSX} from 'react';
-import {Route, Routes} from "react-router-dom";
+import { JSX } from 'react';
+import { Route, Routes } from "react-router-dom";
 import Home from "../../pages/Home";
 import ResourcesByCategory from "../../pages/ResourcesByCategory";
 import LoginPage from "../../pages/Login";
@@ -8,6 +8,7 @@ import RegisterOwnerPage from "../../pages/RegisterOwner";
 import CreateResourcePage from "../../pages/CreateResource";
 import AccountPage from "../../pages/Account";
 import EditResourcePage from "../../pages/EditResource";
+import SearchResultsPage from "../../pages/SearchResults"; // Импортируем новый компонент
 
 export enum AppRoutes {
     HOME = '/',
@@ -17,25 +18,29 @@ export enum AppRoutes {
     REGISTER_OWNER = '/register/owner',
     CREATE_RESOURCE = '/create',
     ACCOUNT = '/account',
-    EDIT_RESOURCE = '/resources/edit/:id'
+    EDIT_RESOURCE = '/resources/edit/:id',
+    SEARCH_RESULTS = '/search', // Новый маршрут для результатов поиска
 }
 
-const RouteConfig: Record<AppRoutes, {path: string, element: JSX.Element}> = {
-    [AppRoutes.HOME]: {path: AppRoutes.HOME, element: <Home/>},
-    [AppRoutes.RESOURCES_BY_CATEGORY]: {path: AppRoutes.RESOURCES_BY_CATEGORY, element: <ResourcesByCategory/>},
-    [AppRoutes.LOGIN]: {path: AppRoutes.LOGIN, element: <LoginPage/>},
-    [AppRoutes.REGISTER]: {path: AppRoutes.REGISTER, element: <RegisterPage/>},
-    [AppRoutes.REGISTER_OWNER]: {path: AppRoutes.REGISTER_OWNER, element: <RegisterOwnerPage/>},
-    [AppRoutes.CREATE_RESOURCE]: {path: AppRoutes.CREATE_RESOURCE, element: <CreateResourcePage/>},
-    [AppRoutes.ACCOUNT]: {path: AppRoutes.ACCOUNT, element: <AccountPage/>},
-    [AppRoutes.EDIT_RESOURCE]: {path: AppRoutes.EDIT_RESOURCE, element: <EditResourcePage/>},
+const RouteConfig: Record<AppRoutes, { path: string, element: JSX.Element }> = {
+    [AppRoutes.HOME]: { path: AppRoutes.HOME, element: <Home /> },
+    [AppRoutes.RESOURCES_BY_CATEGORY]: { path: AppRoutes.RESOURCES_BY_CATEGORY, element: <ResourcesByCategory /> },
+    [AppRoutes.LOGIN]: { path: AppRoutes.LOGIN, element: <LoginPage /> },
+    [AppRoutes.REGISTER]: { path: AppRoutes.REGISTER, element: <RegisterPage /> },
+    [AppRoutes.REGISTER_OWNER]: { path: AppRoutes.REGISTER_OWNER, element: <RegisterOwnerPage /> },
+    [AppRoutes.CREATE_RESOURCE]: { path: AppRoutes.CREATE_RESOURCE, element: <CreateResourcePage /> },
+    [AppRoutes.ACCOUNT]: { path: AppRoutes.ACCOUNT, element: <AccountPage /> },
+    [AppRoutes.EDIT_RESOURCE]: { path: AppRoutes.EDIT_RESOURCE, element: <EditResourcePage /> },
+    [AppRoutes.SEARCH_RESULTS]: { path: AppRoutes.SEARCH_RESULTS, element: <SearchResultsPage /> }, // Новый маршрут
 }
 
 const AppRouter = () => {
     return (
         <Routes>
             {
-                Object.entries(RouteConfig).map(([key, {path, element}]) => <Route key={key} path={path} element={element}/>)
+                Object.entries(RouteConfig).map(([key, { path, element }]) => (
+                    <Route key={key} path={path} element={element} />
+                ))
             }
         </Routes>
     );
