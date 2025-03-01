@@ -139,3 +139,20 @@ export const deleteResource = async (id: number): Promise<void> => {
         throw error;
     }
 };
+
+// Тип для данных изменения владельца ресурса
+export interface ChangeResourceOwnerData {
+    url: string;
+    new_user_id: number;
+}
+
+// Функция для изменения владельца ресурса
+export const changeResourceOwner = async (data: ChangeResourceOwnerData): Promise<Resource> => {
+    try {
+        const response = await axios.put(`${API_URL}/update/change-owner`, data);
+        return response.data;
+    } catch (error) {
+        console.error('Error changing resource owner:', error);
+        throw error;
+    }
+};

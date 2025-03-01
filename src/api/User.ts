@@ -16,6 +16,7 @@ export interface IUser {
     user_type: UserRole;
     createdAt: string;
     updatedAt: string;
+    approved?: boolean;
 }
 
 export interface CreateUserData {
@@ -69,6 +70,17 @@ export const getUserById = async (id: number): Promise<IUser> => {
 export const createUser = async (data: CreateUserData): Promise<IUser> => {
     try {
         const response = await axios.post(API_URL, data);
+        return response.data;
+    } catch (error) {
+        console.error('Error creating user:', error);
+        throw error;
+    }
+};
+
+// Функция для создания нового пользователя
+export const approveUser = async (email: string): Promise<IUser> => {
+    try {
+        const response = await axios.post(`${API_URL}/verify`, {email});
         return response.data;
     } catch (error) {
         console.error('Error creating user:', error);

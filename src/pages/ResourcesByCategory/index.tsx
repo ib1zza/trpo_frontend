@@ -1,6 +1,6 @@
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {getAllResourcesByCategory, Resource} from "../../api/resourses.ts";
-import {useEffect, useMemo, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {Card, Pagination, Select, Space, Typography} from "antd";
 import {useCategories} from "../../hooks/data/useCategories.ts";
 import BackLink from "../../components/ui/BackLink";
@@ -94,6 +94,7 @@ const ResourcesByCategory = () => {
                     key={resource.id}
                     title={<a href={resource.url}>{resource.title}</a>}
                     style={{marginBottom: 16, textAlign: "left"}}
+                    extra={<Link to={`/resources/${resource.id}`}>Подробнее</Link>}
                 >
                     {viewMode === "full" ? (
                         <>

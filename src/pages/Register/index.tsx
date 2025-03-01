@@ -1,23 +1,28 @@
 import React, {useState} from 'react';
-import {Button, Form, Input, message, Typography} from 'antd';
+import {Button, Checkbox, Form, Input, message, Typography} from 'antd';
 import {Link, useNavigate} from 'react-router-dom';
 import {createNewUser} from "../../services/slices/userSlice.ts"; // Импортируйте ваш thunk для регистрации
 import {AppRoutes} from "../../components/AppRouter";
 import {useAppDispatch} from "../../services/store.ts";
 import {UserRole} from "../../api/User.ts";
 
-const { Link: AntLink } = Typography;
-const { Title } = Typography;
+const {Link: AntLink} = Typography;
+const {Title} = Typography;
 
 const RegisterPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [isResourceOwner, setIsResourceOwner] = useState(false);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
     const handleSubmit = async (values: { username: string; email: string; password: string }) => {
         try {
-            await dispatch(createNewUser({...values, user_type: UserRole.USER})).unwrap();
+            await dispatch(createNewUser(
+                {
+                    ...values,
+                    user_type: isResourceOwner ? UserRole.RESOURCE_OWNER : UserRole.USER
+                })).unwrap();
             message.success('Регистрация успешна!');
             navigate(AppRoutes.LOGIN); // Перенаправление на страницу входа после успешной регистрации
         } catch (error: any) {
@@ -26,10 +31,10 @@ const RegisterPage = () => {
     };
 
     return (
-        <div style={{ maxWidth: '400px', margin: 'auto', padding: '20px' }}>
+        <div style={{maxWidth: '400px', margin: 'auto', padding: '20px'}}>
             <Title level={2}>Регистрация</Title>
             <Form
-                style={{ marginTop: 20 }}
+                style={{marginTop: 20}}
                 name="register"
                 onFinish={handleSubmit}
                 layout="vertical"
@@ -37,7 +42,7 @@ const RegisterPage = () => {
                 <Form.Item
                     label="Email"
                     name="email"
-                    rules={[{ required: true, message: 'Пожалуйста, введите ваш email!' }]}
+                    rules={[{required: true, message: 'Пожалуйста, введите ваш email!'}]}
                 >
                     <Input
                         type="email"
@@ -48,7 +53,7 @@ const RegisterPage = () => {
                 <Form.Item
                     label="Пароль"
                     name="password"
-                    rules={[{ required: true, message: 'Пожалуйста, введите ваш пароль!' }]}
+                    rules={[{required: true, message: 'Пожалуйста, введите ваш пароль!'}]}
                 >
                     <Input.Password
                         value={password}
@@ -56,13 +61,35 @@ const RegisterPage = () => {
                     />
                 </Form.Item>
                 <Form.Item>
+                    {/*checkbox*/}
+                    <Checkbox
+                        checked={isResourceOwner}
+                        onChange={(e) => setIsResourceOwner(e.target.checked)}
+                    >
+                        Я владелец ресурса
+                    </Checkbox>
+                </Form.Item>
+                {
+                    isResourceOwner &&
+                    <Form.Item>
+                        <Typography>
+                            Аккаунт для владельца ресурса будет активирован после подтверждения администратором
+                        </Typography>
+                    </Form.Item>}
+                <Form.Item>
                     <Button type="primary" htmlType="submit" block>
                         Зарегистрироваться
                     </Button>
                 </Form.Item>
             </Form>
 
-            <AntLink style={{ color: '#1890ff', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 10 }}>
+            <AntLink style={{
+                color: '#1890ff',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: 10
+            }}>
                 <Typography>
                     Уже есть аккаунт?
                 </Typography>

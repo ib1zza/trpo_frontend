@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from "react";
-import {useLocation} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import SearchBar from "../../components/SearchBar";
 import {useSearch} from "../../hooks/data/useSearch.ts";
 import {Card, Select, Space} from "antd";
 import SearchRefine from "../../components/SearchRefine";
+import BackLink from "../../components/ui/BackLink";
 
 const {Option} = Select;
 
@@ -38,6 +39,7 @@ const SearchResultsPage: React.FC = () => {
 
     return (
         <div>
+            <BackLink/>
             <SearchBar/>
             <SearchRefine/>
             <Space>
@@ -60,9 +62,10 @@ const SearchResultsPage: React.FC = () => {
 
             <h1 style={{
                 marginBottom: 16,
-            }}>Результаты поиска для: {searchTerm} {
-                refineTerm && <span> (Уточнение: {refineTerm})</span>
-            }</h1>
+            }}>
+                Результаты поиска для: {searchTerm}
+                {refineTerm && (<span> (Уточнение: {refineTerm})</span>)}
+            </h1>
             {/* Здесь можно отобразить результаты поиска */}
             {isLoading ? (
                 <p>Loading...</p>
@@ -75,6 +78,7 @@ const SearchResultsPage: React.FC = () => {
                                     key={resource.id}
                                     title={<a href={resource.url}>{resource.title}</a>}
                                     style={{marginBottom: 16, textAlign: "left"}}
+                                    extra={<Link to={`/resources/${resource.id}`}>Подробнее</Link>}
                                 >
                                     {viewMode === "full" ? (
                                         <>
