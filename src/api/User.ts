@@ -17,6 +17,7 @@ export interface IUser {
     createdAt: string;
     updatedAt: string;
     approved?: boolean;
+    avatar_url?: string | null;
 }
 
 export interface CreateUserData {
@@ -111,4 +112,56 @@ export const loginUser = async (data: LoginData): Promise<LoginResponse> => {
     }
 };
 
+export interface UploadAvatarResponse {
+    message: string;
 
+    avatar_url: string;
+}
+
+// Загрузка аватара пользователя
+export const uploadAvatar = async (id: number, file: File): Promise<UploadAvatarResponse> => {
+    try {
+        const formData = new FormData();
+        formData.append('avatar', file);
+        formData.append('id', id.toString());
+
+        console.log(API_URL)
+
+        const response = await axios.post(`${API_URL}/upload-avatar`, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error('Error uploading avatar:', error);
+        throw error;
+    }
+};
+
+// Обновление аватара пользователя
+export const updateAvatar = async (id: number, file: File): Promise<UploadAvatarResponse> => {
+    try {
+        const formData = new FormData();
+        formData.append('avatar', file);
+
+        const response = await axios.put(`${API_URL}/upload-avatar`, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error('Error updating avatar:', error);
+        throw error;
+    }
+};
+
+// Удаление аватара пользователя
+export const deleteAvatar = async (id: number): Promise<{ message: string }> => {
+    try {
+        const response = await axios.delete(`${API_URL}/${id}/avatar`);
+        return response.data;
+    } catch (error) {
+        console.error('Error deleting avatar:', error);
+        throw error;
+    }
+};

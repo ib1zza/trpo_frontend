@@ -1,13 +1,13 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {
     createUser,
-    CreateUserData,
+    CreateUserData, deleteAvatar,
     getUserById,
     IUser,
     LoginData,
-    loginUser,
+    loginUser, updateAvatar,
     updateUser,
-    UpdateUserData
+    UpdateUserData, uploadAvatar
 } from '../../api/User';
 import {getAllResourcesByUser, Resource} from "../../api/resourses.ts";
 
@@ -65,6 +65,34 @@ export const getUsersResources = createAsyncThunk('users/resources', async (user
     const resources = await getAllResourcesByUser(userId);
     return resources;
 })
+
+
+// Thunk для загрузки аватара
+export const uploadUserAvatar = createAsyncThunk(
+    'users/uploadAvatar',
+    async ({ id, file }: { id: number; file: File }) => {
+        const response = await uploadAvatar(id, file);
+        return response.avatar_url;
+    }
+);
+
+// Thunk для обновления аватара
+export const updateUserAvatar = createAsyncThunk(
+    'users/updateAvatar',
+    async ({ id, file }: { id: number; file: File }) => {
+        const response = await updateAvatar(id,file);
+        return response.avatar_url;
+    }
+);
+
+// Thunk для удаления аватара
+export const deleteUserAvatar = createAsyncThunk(
+    'users/deleteAvatar',
+    async (id: number) => {
+        await deleteAvatar(id);
+        return null;
+    }
+);
 
 const userSlice = createSlice({
     name: 'user',
@@ -132,6 +160,30 @@ const userSlice = createSlice({
             .addCase(getUsersResources.fulfilled, (state, action: PayloadAction<Resource[]>) => {
                 state.resources = action.payload;
             })
+            .addCase(uploadUserAvatar.fulfilled, (state, action: PayloadAction<string>) => {
+                if (state.user) {
+                    state.user.avatar_url = action.payload;
+                }
+            })
+            .addCase(updateUserAvatar.fulfilled, (state, action: PayloadAction<string>) => {
+                if (state.user) {
+                    state.user.avatar_url = action.payload;
+                }
+            })
+            .addCase(deleteUserAvatar.fulfilled, (state) => {
+                if (state.user) {
+                    state.user.avatar_url = null;
+                }
+            })
+            .addCase(uploadUserAvatar.rejected, (state, action) => {
+                state.error = action.error.message || 'Failed to upload avatar';
+            })
+            .addCase(updateUserAvatar.rejected, (state, action) => {
+                state.error = action.error.message || 'Failed to update avatar';
+            })
+            .addCase(deleteUserAvatar.rejected, (state, action) => {
+                state.error = action.error.message || 'Failed to delete avatar';
+            });
     },
 });
 
