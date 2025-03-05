@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useResourceVisits } from '../../hooks/data/useResourceVisits.ts';
-import { Space, Spin, Typography, Card, Descriptions, Tag } from 'antd';
+import {Space, Spin, Typography, Card, Descriptions, Tag, Button} from 'antd';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { useResource } from '../../hooks/data/useResource.ts';
 import { useCategories } from '../../hooks/data/useCategories.ts';
 import { useVisitResource } from '../../hooks/data/useVisitResource.ts';
+import html2canvas from 'html2canvas';
+// @ts-ignore
+import jsPDF from 'jspdf';
 
 const { Title } = Typography;
 
@@ -26,6 +29,32 @@ const ResourcePage = () => {
             dates.push(date.toLocaleDateString());
         }
         return dates;
+    };
+
+    const downloadPdf = () => {
+        const input = document.getElementById('resource-page-content') as HTMLElement; // Убедитесь, что у вас есть id у контейнера, который вы хотите захватить
+
+        html2canvas(input).then((canvas) => {
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF('p', 'mm', 'a4'); // A4 size page of PDF
+            const imgWidth = 210; // A4 width in mm
+            const pageHeight = 295; // A4 height in mm
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            let heightLeft = imgHeight;
+            let position = 0;
+
+            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+
+            while (heightLeft >= 0) {
+                position = heightLeft - imgHeight;
+                pdf.addPage();
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+            }
+
+            pdf.save('resource-info.pdf'); // Save PDF
+        });
     };
 
     // Подготовка данных для графика
@@ -53,10 +82,13 @@ const ResourcePage = () => {
     const loading = !visits || !info;
 
     return (
-        <div style={{ padding: '24px' }}>
-            {/* Информация о ресурсе */}
-            {info && (
-                <Card title="Информация о ресурсе" style={{ marginBottom: '24px' }}>
+        <>
+
+    <div id="resource-page-content" style={{padding: '24px'}}>
+        {/* Информация о ресурсе */}
+        {info && (
+                <Card title="Информация о ресурсе" style={{marginBottom: '24px'}}>
+
                     <Descriptions bordered column={1}>
                         <Descriptions.Item label="Название">{info.title}</Descriptions.Item>
                         <Descriptions.Item label="URL">
@@ -84,12 +116,18 @@ const ResourcePage = () => {
                         <Descriptions.Item label="Категория">
                             {categories.find((category) => category.id === info.category_id)?.name}
                         </Descriptions.Item>
+                        <Descriptions.Item label="Действия">
+                            <Button onClick={downloadPdf}>
+                                Скачать PDF
+                            </Button>
+                        </Descriptions.Item>
+
                     </Descriptions>
                 </Card>
             )}
 
             {/* Заголовок */}
-            <Space style={{ marginBottom: '24px' }}>
+            <Space style={{marginBottom: '24px' }}>
                 <Title level={2}>Статистика посещений ресурса</Title>
             </Space>
 
@@ -122,6 +160,8 @@ const ResourcePage = () => {
                 </ResponsiveContainer>
             )}
         </div>
+        </>
+
     );
 };
 
