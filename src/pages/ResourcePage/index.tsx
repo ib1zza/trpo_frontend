@@ -84,7 +84,7 @@ const ResourcePage = () => {
     return (
         <>
 
-    <div id="resource-page-content" style={{padding: '24px'}}>
+    <div id="resource-page-content" data-testid="resource-info" style={{padding: '24px'}}>
         {/* Информация о ресурсе */}
         {info && (
                 <Card title="Информация о ресурсе" style={{marginBottom: '24px'}}>

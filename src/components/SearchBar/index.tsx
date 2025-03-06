@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Input, Button } from "antd";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, {useState} from "react";
+import {Button, Input} from "antd";
+import {useLocation, useNavigate} from "react-router-dom";
 
 const SearchBar: React.FC = () => {
     const location = useLocation();
@@ -27,17 +27,21 @@ const SearchBar: React.FC = () => {
     // Получаем поисковый запрос из URL (если он есть)
 
     return (
-        <div style={{ display: "flex", alignItems: "stretch", gap: "8px", height: 40, marginBottom: 16 }}>
+        <div style={{display: "flex", alignItems: "stretch", gap: "8px", height: 40, marginBottom: 16}}>
             <Input
                 placeholder="Введите поисковый запрос"
                 value={searchTerm}
                 onChange={handleInputChange}
                 onPressEnter={handleSearch} // Поиск при нажатии Enter
-                style={{ width: "100%" }}
+                style={{width: "100%"}}
+                data-testid={'searchbar'}
             />
-            <Button type="primary" onClick={handleSearch} style={{
-                height: "100%",
-            }}>
+            <Button
+                type="primary"
+                onClick={handleSearch} style={{
+                    height: "100%",
+                }}
+                data-testid={'searchbutton'}>
                 Поиск
             </Button>
         </div>

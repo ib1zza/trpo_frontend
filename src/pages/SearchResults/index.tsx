@@ -78,7 +78,7 @@ const SearchResultsPage: React.FC = () => {
                                     key={resource.id}
                                     title={<a href={resource.url}>{resource.title}</a>}
                                     style={{marginBottom: 16, textAlign: "left"}}
-                                    extra={<Link to={`/resources/${resource.id}`}>Подробнее</Link>}
+                                    extra={<Link data-testid={'resource-link'} to={`/resources/${resource.id}`}>Подробнее</Link>}
                                 >
                                     {viewMode === "full" ? (
                                         <>
